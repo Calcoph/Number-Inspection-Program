@@ -12,9 +12,13 @@ Perfect(or triperfect or whatever) number [False]
 Factorial [False]
 Superpermutation [False] (i don't think i will do this but maybe)
 Fibonacci [True]
-Support for the number 0 and negative numbers [False]
+Support for the number 0 and negative numbers [True]
 Hyperlink to a page in wikipedia explaining the property [False]
 Save favorite numbers with the option of a note to explain why [False]
+Support for numbers in any base [False]
+sexagesimal
+duodecimal
+vigesimal
 """
 
 
@@ -46,43 +50,69 @@ class Application(Tk):
         self.inspectionFrame = ttk.Frame(self)
         self.inspectionFrame.grid(column=30, row=10)
 
-        is_It_Prime = self.isItPrime()
-        if is_It_Prime:
-            prime_Text = "{0} is a prime number".format(self.selected_Number)
-        else:
+        if self.selected_Number <= 0:
             prime_Text = "{0} is not a prime number".format(self.selected_Number)
+        else:
+            is_It_Prime = self.isItPrime()
+            if is_It_Prime:
+                prime_Text = "{0} is a prime number".format(self.selected_Number)
+            else:
+                prime_Text = "{0} is not a prime number".format(self.selected_Number)
         self.prime_Label = ttk.Label(self.inspectionFrame, text=prime_Text)
         self.prime_Label.grid(column=1, row=1)
 
-        its_Roots = self.itsRoots()
-        root_Text = ""
-        for root in its_Roots:
-            root_Text = root_Text + str(self.selected_Number) + "'s " + root + "\n"
-        root_List = list(root_Text)
-        if len(root_Text) != 0:
-            del root_List[len(root_List) - 1]
-            root_Text = "".join(root_List)
+        if self.selected_Number == 1:
+            root_Text = "1's nth root 1"
+        elif self.selected_Number == -1:
+            root_Text = "-1's every odd root -1"
         else:
-            root_Text = "{0} has no perfect roots".format(self.selected_Number)
+            its_Roots = self.itsRoots()
+            root_Text = ""
+            for root in its_Roots:
+                root_Text = root_Text + str(self.selected_Number) + "'s " + root + "\n"
+            root_List = list(root_Text)
+            if len(root_Text) != 0:
+                del root_List[len(root_List) - 1]
+                root_Text = "".join(root_List)
+            else:
+                if self.selected_Number != 1 or self.selected_Number != -1:
+                    root_Text = "{0} has no perfect roots".format(self.selected_Number)
         self.root_Label = ttk.Label(self.inspectionFrame, text=root_Text)
         self.root_Label.grid(column=1, row=2)
 
-        number_In_Binary = self.convertToBinary()
-        binary_Text = "{0} in binary: {1}".format(self.selected_Number, number_In_Binary)
+        if self.selected_Number == 0:
+            binary_Text = "0 in binary: 0"
+        else:
+            number_In_Binary = self.convertToBinary()
+            if self.selected_Number < 0:
+                binary_Text = "{0} in binary: -{1}".format(self.selected_Number, number_In_Binary)
+            elif self.selected_Number == 0:
+                binary_Text = "0 in binary: 0"
+            else:
+                binary_Text = "{0} in binary: {1}".format(self.selected_Number, number_In_Binary)
         self.binary_Label = ttk.Label(self.inspectionFrame, text=binary_Text)
         self.binary_Label.grid(column=1, row=3)
 
-        number_In_Hexadecimal = self.convertToHexadecimal()
-        hexadecimal_Text = "{0} in hexadecimal: {1}".format(self.selected_Number, number_In_Hexadecimal)
+        if self.selected_Number == 0:
+            hexadecimal_Text = "0 in hexadecimal: 0"
+        else:
+            number_In_Hexadecimal = self.convertToHexadecimal()
+            if self.selected_Number < 0:
+                hexadecimal_Text = "{0} in hexadecimal: -{1}".format(self.selected_Number, number_In_Hexadecimal)
+            else:
+                hexadecimal_Text = "{0} in hexadecimal: {1}".format(self.selected_Number, number_In_Hexadecimal)
         self.hexadecimal_Label = ttk.Label(self.inspectionFrame, text=hexadecimal_Text)
         self.hexadecimal_Label.grid(column=1, row=4)
 
-        factors = self.checkFactors()
-        if is_It_Prime:
+        if self.selected_Number <= 1: # !!!!!!!!!! WIP !!!!!!!!!!!!
             factors_Text = "{0} = 1*{0}".format(self.selected_Number)
         else:
-            factors = "*".join(factors)
-            factors_Text = "{0} = {1}".format(self.selected_Number, factors)
+            factors = self.checkFactors()
+            if is_It_Prime:
+                factors_Text = "{0} = 1*{0}".format(self.selected_Number)
+            else:
+                factors = "*".join(factors)
+                factors_Text = "{0} = {1}".format(self.selected_Number, factors)
         self.factor_Label = ttk.Label(self.inspectionFrame, text=factors_Text)
         self.factor_Label.grid(column=1, row=5)
 
@@ -94,20 +124,23 @@ class Application(Tk):
         self.palindromic_Label = ttk.Label(self.inspectionFrame, text=palindromic_Text)
         self.palindromic_Label.grid(column=1, row=6)
 
-        place_In_Fibonacci_Sequence = self.isItInFibonacci()
-        if place_In_Fibonacci_Sequence:
-            string_Place = str(place_In_Fibonacci_Sequence)
-            listed_Place = list(string_Place)
-            if listed_Place[len(listed_Place) - 1] == "1":
-                fibonacci_Text = "{0} is in the {1}st place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
-            if listed_Place[len(listed_Place) - 1] == "2":
-                fibonacci_Text = "{0} is in the {1}nd place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
-            if listed_Place[len(listed_Place) - 1] == "3":
-                fibonacci_Text = "{0} is in the {1}rd place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
-            else:
-                fibonacci_Text = "{0} is in the {1}th place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
-        else:
+        if self.selected_Number <= 0:
             fibonacci_Text = "{0} does not appear in the fibonacci sequence".format(self.selected_Number)
+        else:
+            place_In_Fibonacci_Sequence = self.isItInFibonacci()
+            if place_In_Fibonacci_Sequence:
+                string_Place = str(place_In_Fibonacci_Sequence)
+                listed_Place = list(string_Place)
+                if listed_Place[len(listed_Place) - 1] == "1":
+                    fibonacci_Text = "{0} is in the {1}st place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
+                elif listed_Place[len(listed_Place) - 1] == "2":
+                    fibonacci_Text = "{0} is in the {1}nd place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
+                elif listed_Place[len(listed_Place) - 1] == "3":
+                    fibonacci_Text = "{0} is in the {1}rd place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
+                else:
+                    fibonacci_Text = "{0} is in the {1}th place in the fibonacci sequence".format(self.selected_Number, place_In_Fibonacci_Sequence)
+            else:
+                fibonacci_Text = "{0} does not appear in the fibonacci sequence".format(self.selected_Number)
         self.fibonacci_Label = ttk.Label(self.inspectionFrame, text=fibonacci_Text)
         self.fibonacci_Label.grid(column=1, row=7)
 
@@ -130,14 +163,17 @@ class Application(Tk):
             return False
     def itsRoots(self):
         input_Number = abs(self.selected_Number)
-        if self.selected_Number >= 0:
+        if self.selected_Number > 0:
             degree = 2
             negative = False
+        elif self.selected_Number == 0:
+            all_Roots = []
+            return all_Roots
         else:
             degree = 3
             negative = True
         all_Roots = []
-        while degree < input_Number:
+        while degree <= input_Number:
             root = int(round(input_Number ** (1.0 / degree)))
             if root ** degree == input_Number:
                 if negative:
@@ -175,7 +211,7 @@ class Application(Tk):
         result = []
 
         while True:
-            if input_Number == 1:
+            if input_Number == 1 or input_Number == -1:
                 result.append(int(input_Number % 2))
                 break
             result.append(int(input_Number % 2))
