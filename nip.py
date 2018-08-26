@@ -103,7 +103,7 @@ class Application(Tk):
             except:
                 pass
         def calculatorC(event=None):
-            last_Entry.set(0)
+            last_Entry.set(False)
             last_operation.set("")
             operating.set(False)
             calculator_Entry.set("")
@@ -132,30 +132,47 @@ class Application(Tk):
                 del list_Operations[0]
             list_Operations = "".join(list_Operations)
             operations.set(list_Operations)
-            last_Entry = calculator_Entry.get()
+            last_Entry.set(calculator_Entry.get())
         def calculatorDivide(event=None):
             pass
+            last_Entry.set(calculator_Entry.get())
+            last_operation.set(" / ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorMultiply(event=None):
             pass
+            last_Entry.set(calculator_Entry.get())
+            last_operation.set(" x ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorSubstract(event=None):
             pass
+            last_Entry.set(calculator_Entry.get())
+            last_operation.set(" - ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorAdd(event=None):
-            pass
+            last_Entry.set(calculator_Entry.get())
+            last_operation.set(" + ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorEquals(event=None):
             pass
+            current_Entry = calculator_Entry.get()
+            result = ""
+            last_operation.set(" = ")
+            operations.set(operations.get() + current_Entry +  last_operation.get() + result)
             operating.set(True)
+
         last_Entry = StringVar()
-        last_Entry.set(0)
+        last_Entry.set(False)
         last_operation = StringVar()
         last_operation.set("")
         operating = BooleanVar()
         operating.set(False)
         operations = StringVar()
         calculator_Entry = StringVar()
+
         calculator_Frame = ttk.Frame(self.main_Frame)
         calculator_Frame.grid(column=1, row=3, columnspan=2)
         operationsLabel = ttk.Label(calculator_Frame,
@@ -165,6 +182,7 @@ class Application(Tk):
         entry_Display = ttk.Entry(calculator_Frame,
                                     textvariable=calculator_Entry
                                     ).grid(column=1, row=2, columnspan=4)
+
         ttk.Button(calculator_Frame, text="CE", command=calculatorCE
                     ).grid(column=1, row=3)
         ttk.Button(calculator_Frame, text="7",
@@ -215,6 +233,7 @@ class Application(Tk):
                     ).grid(column=4, row=6)
         ttk.Button(calculator_Frame, text="=", command=calculatorEquals
                     ).grid(column=4, row=7)
+
     def createInspectionFrame(self):
         self.selected_Number = int(self.input_Number.get())
         self.inspection_Frame = ttk.Frame(self.main_Frame)
