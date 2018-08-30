@@ -37,14 +37,13 @@ class Application(Tk):
         self.createMenu()
 
     def createSettingsValues(self):
+        self.decimal_Mark = ","
+        self.thousand_Mark = "."
         self.uppercase_hexadecimal = BooleanVar()
         self.uppercase_hexadecimal.set(False)
         self.decimal_Separator = IntVar()
         self.decimal_Separator.set(1)
-        self.decimal_Mark = StringVar()
-        self.decimal_Mark.set(",")
-        self.thousand_Mark = StringVar()
-        self.thousand_Mark.set(".")
+
         self.show_Relevant = BooleanVar()
         self.show_Relevant.set(True)
         self.show_Prime = BooleanVar()
@@ -103,12 +102,11 @@ class Application(Tk):
             except:
                 pass
         def calculatorC(event=None):
-            last_Entry.set(False)
+            self.last_Entry = False
             last_operation.set("")
             operating.set(False)
             calculator_Entry.set("")
             operations.set("")
-            pass
         def calculatorRemove(event=None):
             try:
                 listed_Entry = list(calculator_Entry.get())
@@ -132,40 +130,50 @@ class Application(Tk):
                 del list_Operations[0]
             list_Operations = "".join(list_Operations)
             operations.set(list_Operations)
-            last_Entry.set(calculator_Entry.get())
+            self.last_Entry = calculator_Entry.get()
         def calculatorDivide(event=None):
-            pass
-            last_Entry.set(calculator_Entry.get())
+            self.last_Entry = calculator_Entry.get()
             last_operation.set(" / ")
             operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorMultiply(event=None):
-            pass
-            last_Entry.set(calculator_Entry.get())
+            self.last_Entry = calculator_Entry.get()
             last_operation.set(" x ")
             operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorSubstract(event=None):
-            pass
-            last_Entry.set(calculator_Entry.get())
+            self.last_Entry = calculator_Entry.get()
             last_operation.set(" - ")
             operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorAdd(event=None):
-            last_Entry.set(calculator_Entry.get())
+            self.last_Entry = calculator_Entry.get()
             last_operation.set(" + ")
             operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
             operating.set(True)
         def calculatorEquals(event=None):
-            pass
             current_Entry = calculator_Entry.get()
             result = ""
+
+            if last_operation.get() == " / ":
+                result = str(int(self.last_Entry) / int(current_Entry))
+            elif last_operation.get() == " x ":
+                print(self.last_Entry)
+                print(current_Entry)
+                result = str(int(self.last_Entry) * int(current_Entry))
+                print(result)
+            elif last_operation.get() == " - ":
+                result = str(int(self.last_Entry) - int(current_Entry))
+            elif last_operation.get() == " + ":
+                result = str(int(self.last_Entry) + int(current_Entry))
+            else:
+                pass
+
             last_operation.set(" = ")
             operations.set(operations.get() + current_Entry +  last_operation.get() + result)
             operating.set(True)
 
-        last_Entry = StringVar()
-        last_Entry.set(False)
+        self.last_Entry = False
         last_operation = StringVar()
         last_operation.set("")
         operating = BooleanVar()
@@ -419,7 +427,7 @@ class Application(Tk):
                     list_Result = list(str(factorial_Result))
                     exponent = len(list_Result) - 1
                     factorial_Result = list_Result[0]\
-                                        + self.decimal_Mark.get()\
+                                        + self.decimal_Mark\
                                         + list_Result[1]\
                                         + list_Result[2]\
                                         + "*10^"\
@@ -443,11 +451,11 @@ class Application(Tk):
     def createMenu(self):
         def updateDecimalSeparator():
             if self.decimal_Separator.get() == 1:
-                self.decimal_Mark.set(",")
-                self.thousand_Mark.set(".")
+                self.decimal_Mark = ","
+                self.thousand_Mark = "."
             elif self.decimal_Separator.get() == 2:
-                self.decimal_Mark.set(".")
-                self.thousand_Mark.set(",")
+                self.decimal_Mark = "."
+                self.thousand_Mark = ","
         menu_Bar = Menu(self)
         self.config(menu=menu_Bar)
 
