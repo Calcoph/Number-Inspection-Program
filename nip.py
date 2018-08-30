@@ -16,10 +16,11 @@ Support for the number 0 and negative numbers [True]
 Hyperlink to a page in wikipedia explaining the property [False]
 Save favorite numbers with the option of a note to explain why [False]
 Support for numbers in any base [False]
-sexagesimal [False]
-duodecimal [False]
-vigesimal [False]
+Sexagesimal [False]
+Duodecimal [False]
+Vigesimal [False]
 9/18.5
+Variable maximum number [False]
 """
 
 
@@ -85,9 +86,9 @@ class Application(Tk):
         def calculatorCE(event=None):
             calculator_Entry.set("")
         def calculatorNumber(number, event=None):
-            if operating:
+            if operating.get():
                 calculator_Entry.set(number)
-                operating = False
+                operating.set(False)
             else:
                 calculator_Entry.set(calculator_Entry.get() + number)
         def calculatorPositiveNegative(event=None):
@@ -103,8 +104,8 @@ class Application(Tk):
                 pass
         def calculatorC(event=None):
             self.last_Entry = False
-            last_operation = ""
-            operating = False
+            last_operation.set("")
+            operating.set(False)
             calculator_Entry.set("")
             operations.set("")
         def calculatorRemove(event=None):
@@ -116,8 +117,11 @@ class Application(Tk):
             except:
                 pass
         def calculatorSquare(event=None):
-            last_operation = "^2 "
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
+            last_operation.set("^2 ")
+            operations.set(operations.get()
+                            + calculator_Entry.get()
+                            +  last_operation.get()
+                            )
             try:
                 if len(str(int(calculator_Entry.get()) ** 2)) > 80:
                     calculator_Entry.set("Too big")
@@ -126,70 +130,90 @@ class Application(Tk):
             except:
                 pass
             list_Operations = list(operations.get())
-            while len(list_Operations) > 40:
+            while len(list_Operations) > 45:
                 del list_Operations[0]
             list_Operations = "".join(list_Operations)
             operations.set(list_Operations)
             self.last_Entry = calculator_Entry.get()
         def calculatorDivide(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation = " / "
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
-            operating = True
+            last_operation.set(" / ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
+            operating.set(True)
         def calculatorMultiply(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation = " x "
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
-            operating = True
+            last_operation.set(" x ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
+            operating.set(True)
         def calculatorSubstract(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation = " - "
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
-            operating = True
+            last_operation.set(" - ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
+            operating.set(True)
         def calculatorAdd(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation = " + "
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
-            operating = True
+            last_operation.set(" + ")
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
+            operating.set(True)
         def calculatorEquals(event=None):
             current_Entry = calculator_Entry.get()
             result = ""
 
-            if last_operation == " / ":
+            if last_operation.get() == " / ":
                 result = str(int(self.last_Entry) / int(current_Entry))
-            elif last_operation == " x ":
-                print(self.last_Entry)
-                print(current_Entry)
+            elif last_operation.get() == " x ":
                 result = str(int(self.last_Entry) * int(current_Entry))
-                print(result)
-            elif last_operation == " - ":
+            elif last_operation.get() == " - ":
                 result = str(int(self.last_Entry) - int(current_Entry))
-            elif last_operation == " + ":
+            elif last_operation.get() == " + ":
                 result = str(int(self.last_Entry) + int(current_Entry))
             else:
                 pass
 
-            last_operation = " = "
-            operations.set(operations.get() + current_Entry +  last_operation + result)
-            operating = True
-
+            last_operation.set(" = ")
+            operations.set("")
+            calculator_Entry.set(result)
+            operating.set(True)
+        def exportInput(event=None):
+            self.input_Number.set(calculator_Entry.get())
         self.last_Entry = False
-        last_operation = ""
-        operating = False
+        last_operation = StringVar()
+        last_operation.set("")
+        operating = BooleanVar()
+        operating.set(False)
         operations = StringVar()
         calculator_Entry = StringVar()
 
         calculator_Frame = ttk.Frame(self.main_Frame)
         calculator_Frame.grid(column=1, row=3, columnspan=2)
+        calculator_Frame.columnconfigure(1, weight=1)
+        calculator_Entry_Frame = ttk.Frame(calculator_Frame)
+        calculator_Entry_Frame.grid(column=1, row=2, columnspan=4, sticky="W")
+        calculator_Entry_Frame.columnconfigure(1, weight=1)
+        calculator_Entry_Frame.columnconfigure(2, weight=1)
         operationsLabel = ttk.Label(calculator_Frame,
                                     textvariable=operations).grid(column=1,
                                                                     row=1,
                                                                     columnspan=4)
-        entry_Display = ttk.Entry(calculator_Frame,
-                                    textvariable=calculator_Entry
-                                    ).grid(column=1, row=2, columnspan=4)
+        entry_Display = ttk.Entry(calculator_Entry_Frame,
+                                    textvariable=calculator_Entry,
+                                    width=42
+                                    ).grid(column=2, row=2,
+                                            columnspan=3,
+                                            sticky="W",
+                                            pady=(0, 10)
+                                            )
+        ttk.Button(calculator_Entry_Frame, text="⮤",
+                    command=exportInput,
+                    width=0
+                    ).grid(column=1, row=2,
+                            pady=(0, 10),
+                            padx=(24, 0),
+                            sticky="E"
+                            )
 
-        ttk.Button(calculator_Frame, text="CE", command=calculatorCE
+        ttk.Button(calculator_Frame, text="CE",
+                    command=calculatorCE
                     ).grid(column=1, row=3)
         ttk.Button(calculator_Frame, text="7",
                     command=lambda:calculatorNumber("7")
@@ -200,9 +224,11 @@ class Application(Tk):
         ttk.Button(calculator_Frame, text="1",
                     command=lambda:calculatorNumber("1")
                     ).grid(column=1, row=6)
-        ttk.Button(calculator_Frame, text="+/-", command=calculatorPositiveNegative
+        ttk.Button(calculator_Frame, text="+/-",
+                    command=calculatorPositiveNegative
                     ).grid(column=1, row=7)
-        ttk.Button(calculator_Frame, text="C", command=calculatorC
+        ttk.Button(calculator_Frame, text="C",
+                    command=calculatorC
                     ).grid(column=2, row=3)
         ttk.Button(calculator_Frame, text="8",
                     command=lambda:calculatorNumber("8")
@@ -216,7 +242,8 @@ class Application(Tk):
         ttk.Button(calculator_Frame, text="0",
                     command=lambda:calculatorNumber("0")
                     ).grid(column=2, row=7)
-        ttk.Button(calculator_Frame, text="<-",command=calculatorRemove
+        ttk.Button(calculator_Frame, text="<-",
+                    command=calculatorRemove
                     ).grid(column=3, row=3)
         ttk.Button(calculator_Frame, text="9",
                     command=lambda:calculatorNumber("9")
@@ -227,17 +254,23 @@ class Application(Tk):
         ttk.Button(calculator_Frame, text="3",
                     command=lambda:calculatorNumber("3")
                     ).grid(column=3, row=6)
-        ttk.Button(calculator_Frame, text="x^2",command=calculatorSquare
+        ttk.Button(calculator_Frame, text="x^2",
+                    command=calculatorSquare
                     ).grid(column=3, row=7)
-        ttk.Button(calculator_Frame, text="/", command=calculatorDivide
+        ttk.Button(calculator_Frame, text="/",
+                    command=calculatorDivide
                     ).grid(column=4, row=3)
-        ttk.Button(calculator_Frame, text="x", command=calculatorMultiply
+        ttk.Button(calculator_Frame, text="x",
+                    command=calculatorMultiply
                     ).grid(column=4, row=4)
-        ttk.Button(calculator_Frame, text="-", command=calculatorSubstract
+        ttk.Button(calculator_Frame, text="-",
+                    command=calculatorSubstract
                     ).grid(column=4, row=5)
-        ttk.Button(calculator_Frame, text="+", command=calculatorAdd
+        ttk.Button(calculator_Frame, text="+",
+                    command=calculatorAdd
                     ).grid(column=4, row=6)
-        ttk.Button(calculator_Frame, text="=", command=calculatorEquals
+        ttk.Button(calculator_Frame, text="=",
+                    command=calculatorEquals
                     ).grid(column=4, row=7)
 
     def createInspectionFrame(self):
@@ -421,17 +454,20 @@ class Application(Tk):
             has_Factorial = True
             if self.selected_Number >= 0:
                 factorial_Result = self.factorial()
-                if len(str(factorial_Result)) > 10:
-                    list_Result = list(str(factorial_Result))
-                    exponent = len(list_Result) - 1
-                    factorial_Result = list_Result[0]\
-                                        + self.decimal_Mark\
-                                        + list_Result[1]\
-                                        + list_Result[2]\
-                                        + "*10^"\
-                                        + str(exponent)
-                factorial_Text = "{0}! = {1}".format(self.selected_Number,
-                                                        factorial_Result)
+                if factorial_Result != "number too big":
+                    if len(str(factorial_Result)) > 10:
+                        list_Result = list(str(factorial_Result))
+                        exponent = len(list_Result) - 1
+                        factorial_Result = list_Result[0]\
+                                            + self.decimal_Mark\
+                                            + list_Result[1]\
+                                            + list_Result[2]\
+                                            + "*10^"\
+                                            + str(exponent)
+                    factorial_Text = "{0}! = {1}".format(self.selected_Number,
+                                                            factorial_Result)
+                else:
+                    factorial_Text = "{0}! is too big".format(self.selected_Number)
             else:
                 has_Factorial = False
                 factorial_Text = "{0} has no factorial".format(self.selected_Number)
@@ -697,12 +733,15 @@ class Application(Tk):
         return False
 
     def factorial(self):
-        product = 1
-        factor = 1
-        while factor <= self.selected_Number:
-            product = product * factor
-            factor += 1
-        return product
+        if self.selected_Number <= 50000:
+            product = 1
+            factor = 1
+            while factor <= self.selected_Number:
+                product = product * factor
+                factor += 1
+            return product
+        else:
+            return "number too big"
 
 root = Application()
 root.mainloop()
