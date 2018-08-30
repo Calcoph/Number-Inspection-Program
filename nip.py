@@ -32,11 +32,11 @@ class Application(Tk):
 
     def __init__(self):
         Tk.__init__(self)
-        self.createSettingsValues()
+        self.createSettingsVariables()
         self.createInitialWidgets()
         self.createMenu()
 
-    def createSettingsValues(self):
+    def createSettingsVariables(self):
         self.decimal_Mark = ","
         self.thousand_Mark = "."
         self.uppercase_hexadecimal = BooleanVar()
@@ -85,9 +85,9 @@ class Application(Tk):
         def calculatorCE(event=None):
             calculator_Entry.set("")
         def calculatorNumber(number, event=None):
-            if operating.get():
+            if operating:
                 calculator_Entry.set(number)
-                operating.set(False)
+                operating = False
             else:
                 calculator_Entry.set(calculator_Entry.get() + number)
         def calculatorPositiveNegative(event=None):
@@ -103,8 +103,8 @@ class Application(Tk):
                 pass
         def calculatorC(event=None):
             self.last_Entry = False
-            last_operation.set("")
-            operating.set(False)
+            last_operation = ""
+            operating = False
             calculator_Entry.set("")
             operations.set("")
         def calculatorRemove(event=None):
@@ -116,8 +116,8 @@ class Application(Tk):
             except:
                 pass
         def calculatorSquare(event=None):
-            last_operation.set("^2 ")
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
+            last_operation = "^2 "
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
             try:
                 if len(str(int(calculator_Entry.get()) ** 2)) > 80:
                     calculator_Entry.set("Too big")
@@ -133,51 +133,49 @@ class Application(Tk):
             self.last_Entry = calculator_Entry.get()
         def calculatorDivide(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation.set(" / ")
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
-            operating.set(True)
+            last_operation = " / "
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
+            operating = True
         def calculatorMultiply(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation.set(" x ")
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
-            operating.set(True)
+            last_operation = " x "
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
+            operating = True
         def calculatorSubstract(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation.set(" - ")
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
-            operating.set(True)
+            last_operation = " - "
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
+            operating = True
         def calculatorAdd(event=None):
             self.last_Entry = calculator_Entry.get()
-            last_operation.set(" + ")
-            operations.set(operations.get() + calculator_Entry.get() +  last_operation.get())
-            operating.set(True)
+            last_operation = " + "
+            operations.set(operations.get() + calculator_Entry.get() +  last_operation)
+            operating = True
         def calculatorEquals(event=None):
             current_Entry = calculator_Entry.get()
             result = ""
 
-            if last_operation.get() == " / ":
+            if last_operation == " / ":
                 result = str(int(self.last_Entry) / int(current_Entry))
-            elif last_operation.get() == " x ":
+            elif last_operation == " x ":
                 print(self.last_Entry)
                 print(current_Entry)
                 result = str(int(self.last_Entry) * int(current_Entry))
                 print(result)
-            elif last_operation.get() == " - ":
+            elif last_operation == " - ":
                 result = str(int(self.last_Entry) - int(current_Entry))
-            elif last_operation.get() == " + ":
+            elif last_operation == " + ":
                 result = str(int(self.last_Entry) + int(current_Entry))
             else:
                 pass
 
-            last_operation.set(" = ")
-            operations.set(operations.get() + current_Entry +  last_operation.get() + result)
-            operating.set(True)
+            last_operation = " = "
+            operations.set(operations.get() + current_Entry +  last_operation + result)
+            operating = True
 
         self.last_Entry = False
-        last_operation = StringVar()
-        last_operation.set("")
-        operating = BooleanVar()
-        operating.set(False)
+        last_operation = ""
+        operating = False
         operations = StringVar()
         calculator_Entry = StringVar()
 
