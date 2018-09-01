@@ -4,15 +4,22 @@ Prime check [True]
 Square(or cube or whatever) root check [True]
 Binary [True]
 Hexadecimal [True]
-The number in all bases(the limit is an input ofc) [False]
+
+The number in all bases(up to 36) [False]
+
 If it's not prime, check it's factors [True]
 Palindromic check [True]
+
 Truncatable prime [False]
 Perfect(or triperfect or whatever) number [False]
+
 Factorial [True]
+
 Superpermutation [False] (i don't think i will do this but maybe)
+
 Fibonacci [True]
 Support for the number 0 and negative numbers [True]
+
 Hyperlink to a page in wikipedia explaining the property [False]
 Save favorite numbers with the option of a note to explain why [False]
 Support for numbers in any base [False]
@@ -21,6 +28,8 @@ Duodecimal [False]
 Vigesimal [False]
 9/18.5
 Variable maximum number [False]
+Roman number [False]
+Spanish support [False]
 """
 
 
@@ -63,6 +72,80 @@ class Application(Tk):
         self.show_Fibonacci.set(True)
         self.show_Factorial = BooleanVar()
         self.show_Factorial.set(True)
+
+        self.selected_Bases = {2, 8, 10, 16}
+        self.show_All_Bases = BooleanVar()
+        self.show_All_Bases.set(False)
+        self.show_Base_2 = BooleanVar()
+        self.show_Base_2.set(True)
+        self.show_Base_3 = BooleanVar()
+        self.show_Base_3.set(False)
+        self.show_Base_4 = BooleanVar()
+        self.show_Base_4.set(False)
+        self.show_Base_5 = BooleanVar()
+        self.show_Base_5.set(False)
+        self.show_Base_6 = BooleanVar()
+        self.show_Base_6.set(False)
+        self.show_Base_7 = BooleanVar()
+        self.show_Base_7.set(False)
+        self.show_Base_8 = BooleanVar()
+        self.show_Base_8.set(True)
+        self.show_Base_9 = BooleanVar()
+        self.show_Base_9.set(False)
+        self.show_Base_10 = BooleanVar()
+        self.show_Base_10.set(True)
+        self.show_Base_11 = BooleanVar()
+        self.show_Base_11.set(False)
+        self.show_Base_12 = BooleanVar()
+        self.show_Base_12.set(False)
+        self.show_Base_13 = BooleanVar()
+        self.show_Base_13.set(False)
+        self.show_Base_14 = BooleanVar()
+        self.show_Base_14.set(False)
+        self.show_Base_15 = BooleanVar()
+        self.show_Base_15.set(False)
+        self.show_Base_16 = BooleanVar()
+        self.show_Base_16.set(True)
+        self.show_Base_17 = BooleanVar()
+        self.show_Base_17.set(False)
+        self.show_Base_18 = BooleanVar()
+        self.show_Base_18.set(False)
+        self.show_Base_19 = BooleanVar()
+        self.show_Base_19.set(False)
+        self.show_Base_20 = BooleanVar()
+        self.show_Base_20.set(False)
+        self.show_Base_21 = BooleanVar()
+        self.show_Base_21.set(False)
+        self.show_Base_22 = BooleanVar()
+        self.show_Base_22.set(False)
+        self.show_Base_23 = BooleanVar()
+        self.show_Base_23.set(False)
+        self.show_Base_24 = BooleanVar()
+        self.show_Base_24.set(False)
+        self.show_Base_25 = BooleanVar()
+        self.show_Base_25.set(False)
+        self.show_Base_26 = BooleanVar()
+        self.show_Base_26.set(False)
+        self.show_Base_27 = BooleanVar()
+        self.show_Base_27.set(False)
+        self.show_Base_28 = BooleanVar()
+        self.show_Base_28.set(False)
+        self.show_Base_29 = BooleanVar()
+        self.show_Base_29.set(False)
+        self.show_Base_30 = BooleanVar()
+        self.show_Base_30.set(False)
+        self.show_Base_31 = BooleanVar()
+        self.show_Base_31.set(False)
+        self.show_Base_32 = BooleanVar()
+        self.show_Base_32.set(False)
+        self.show_Base_33 = BooleanVar()
+        self.show_Base_33.set(False)
+        self.show_Base_34 = BooleanVar()
+        self.show_Base_34.set(False)
+        self.show_Base_35 = BooleanVar()
+        self.show_Base_35.set(False)
+        self.show_Base_36 = BooleanVar()
+        self.show_Base_36.set(False)
 
     def createInitialWidgets(self):
         def inspect(event=None):
@@ -483,6 +566,82 @@ class Application(Tk):
             #print()
 
     def createMenu(self):
+        menu_Bar = Menu(self)
+        self.config(menu=menu_Bar)
+
+        self.settings = Menu(menu_Bar, tearoff=0)
+
+        self.settings.add_command(label="Open Settings Window",
+                                    command=self.settingsWindow)
+        self.settings.add_separator()
+        self.settings.add_command(label="Exit", command=self.quit)
+        menu_Bar.add_cascade(label="Settings", menu=self.settings)
+
+    def settingsWindow(self):
+        def goBack():
+            self.settings_Window_Frame.grid_forget()
+            self.createInitialWidgets()
+        self.main_Frame.grid_forget()
+        self.settings_Window_Frame = ttk.Frame(self)
+        self.settings_Window_Frame.grid(column=1, row=1)
+        ttk.Button(self.settings_Window_Frame, text="<--", command=goBack, width=0)\
+                    .grid(column=1, row=1, sticky=(NW))
+
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show only relevant information",
+                        variable=self.show_Relevant,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=1, row=2, columnspan=2)
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show if the number is prime",
+                        variable=self.show_Prime,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=1, row=3, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show the number's roots",
+                        variable=self.show_Roots,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=1, row=4, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show the number in binary",
+                        variable=self.show_Binary,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=1, row=5, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show the number in hexadecimal",
+                        variable=self.show_Hexadecimal,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=1, row=6, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show the number's factors",
+                        variable=self.show_Factors,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=2, row=3, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show if the number is palindromic",
+                        variable=self.show_Palindromic,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=2, row=4, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show the number in the Fibonacci sequence",
+                        variable=self.show_Fibonacci,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=2, row=5, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show the factorial of the number",
+                        variable=self.show_Factorial,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=2, row=6, sticky="W")
+
         def updateDecimalSeparator():
             if self.decimal_Separator.get() == 1:
                 self.decimal_Mark = ","
@@ -490,93 +649,383 @@ class Application(Tk):
             elif self.decimal_Separator.get() == 2:
                 self.decimal_Mark = "."
                 self.thousand_Mark = ","
-        menu_Bar = Menu(self)
-        self.config(menu=menu_Bar)
+        self.cosmetic_Preferences_Frame = ttk.Frame(self.settings_Window_Frame,
+                                                    padding="0 15 0 0"
+                                                    ).grid(column=1,
+                                                           row=7)
 
-        self.settings = Menu(menu_Bar, tearoff=0)
-        self.settings.add_checkbutton(label="Uppercase Hexadecimal",
-                                        variable=self.uppercase_hexadecimal,
-                                        onvalue=True,
-                                        offvalue=False)
-        self.settings.add_separator()
-        self.settings.add_radiobutton(label="Decimal Comma and Thousand Dot",
-                                        variable=self.decimal_Separator,
-                                        value=1,
-                                        command=updateDecimalSeparator)
-        self.settings.add_radiobutton(label="Decimal Dot and Thousand Comma",
-                                        variable=self.decimal_Separator,
-                                        value=2,
-                                        command=updateDecimalSeparator)
-        self.settings.add_separator()
-        self.settings.add_command(label="Inspection Settings",
-                                    command=self.inspectionSettings)
-        self.settings.add_separator()
-        self.settings.add_command(label="Exit", command=self.quit)
-        menu_Bar.add_cascade(label="Settings", menu=self.settings)
+        ttk.Label(self.cosmetic_Preferences_Frame,
+                  text="Show numbers the following way:").grid(column=1, row=7)
+        ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="10000/3 = 3.333,33",
+                        variable=self.decimal_Separator,
+                        value=1,
+                        command=updateDecimalSeparator
+                        ).grid(column=1, row=8)
+        ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="10000/3 = 3,333.33",
+                        variable=self.decimal_Separator,
+                        value=2,
+                        command=updateDecimalSeparator
+                        ).grid(column=1, row=9)
 
-    def inspectionSettings(self):
-        def goBack():
-            self.inspection_Settings_Frame.grid_forget()
-            self.createInitialWidgets()
-        self.main_Frame.grid_forget()
-        self.inspection_Settings_Frame = ttk.Frame(self)
-        self.inspection_Settings_Frame.grid(column=1, row=1)
-        ttk.Button(self.inspection_Settings_Frame, text="<--", command=goBack)\
-                    .grid(column=1, row=1, sticky=(NW))
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show only relevant information",
-                        variable=self.show_Relevant,
+        ttk.Label(self.cosmetic_Preferences_Frame,
+                  text="Show numbers in base 10+ the following way:"
+                  ).grid(column=2, row=7)
+        ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="A78FC0",
+                        variable=self.uppercase_hexadecimal,
+                        value=True).grid(column=2, row=8)
+        ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="a78fc0",
+                        variable=self.uppercase_hexadecimal,
+                        value=False).grid(column=2, row=9)
+
+        self.base_Settings_Frame = ttk.Frame(self, padding="15 0 0 0")
+        self.base_Settings_Frame.grid(column=2, row=1)
+        self.base_Settings_Frame.columnconfigure(1, weight=1)
+        self.base_Settings_Frame.columnconfigure(2, weight=1)
+        self.base_Settings_Frame.columnconfigure(3, weight=1)
+        self.base_Settings_Frame.columnconfigure(4, weight=1)
+        self.base_Settings_Frame.columnconfigure(5, weight=1)
+        self.base_Settings_Frame.columnconfigure(6, weight=1)
+        ttk.Label(self.base_Settings_Frame, text="Display the number in the following bases:").grid(column=1, row=1, columnspan=6)
+        def updateBases(base, boolean):
+            if boolean == True:
+                self.selected_Bases.add(base)
+            elif boolean == False:
+                self.selected_Bases.discard(base)
+            if len(self.selected_Bases) == 35:
+                self.show_All_Bases.set(True)
+            else:
+                self.show_All_Bases.set(False)
+        def selectAll():
+            checkbox_State = self.show_All_Bases.get()
+            for base in range(37):
+                if base > 1:
+                    updateBases(base, checkbox_State)
+            self.show_Base_2.set(self.show_All_Bases.get())
+            self.show_Base_3.set(self.show_All_Bases.get())
+            self.show_Base_4.set(self.show_All_Bases.get())
+            self.show_Base_5.set(self.show_All_Bases.get())
+            self.show_Base_6.set(self.show_All_Bases.get())
+            self.show_Base_7.set(self.show_All_Bases.get())
+            self.show_Base_8.set(self.show_All_Bases.get())
+            self.show_Base_9.set(self.show_All_Bases.get())
+            self.show_Base_10.set(self.show_All_Bases.get())
+            self.show_Base_11.set(self.show_All_Bases.get())
+            self.show_Base_12.set(self.show_All_Bases.get())
+            self.show_Base_13.set(self.show_All_Bases.get())
+            self.show_Base_14.set(self.show_All_Bases.get())
+            self.show_Base_15.set(self.show_All_Bases.get())
+            self.show_Base_16.set(self.show_All_Bases.get())
+            self.show_Base_17.set(self.show_All_Bases.get())
+            self.show_Base_18.set(self.show_All_Bases.get())
+            self.show_Base_19.set(self.show_All_Bases.get())
+            self.show_Base_20.set(self.show_All_Bases.get())
+            self.show_Base_21.set(self.show_All_Bases.get())
+            self.show_Base_22.set(self.show_All_Bases.get())
+            self.show_Base_23.set(self.show_All_Bases.get())
+            self.show_Base_24.set(self.show_All_Bases.get())
+            self.show_Base_25.set(self.show_All_Bases.get())
+            self.show_Base_26.set(self.show_All_Bases.get())
+            self.show_Base_27.set(self.show_All_Bases.get())
+            self.show_Base_28.set(self.show_All_Bases.get())
+            self.show_Base_29.set(self.show_All_Bases.get())
+            self.show_Base_30.set(self.show_All_Bases.get())
+            self.show_Base_31.set(self.show_All_Bases.get())
+            self.show_Base_32.set(self.show_All_Bases.get())
+            self.show_Base_33.set(self.show_All_Bases.get())
+            self.show_Base_34.set(self.show_All_Bases.get())
+            self.show_Base_35.set(self.show_All_Bases.get())
+            self.show_Base_36.set(self.show_All_Bases.get())
+        ttk.Checkbutton(self.base_Settings_Frame, text="All",
+                        variable=self.show_All_Bases,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=1, row=2, columnspan=2)
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show if the number is prime",
-                        variable=self.show_Prime,
+                        offvalue=False,
+                        command=selectAll
+                        ).grid(column=1,
+                               row=2,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="2",
+                        variable=self.show_Base_2,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=1, row=3, sticky="W")
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show the number's roots",
-                        variable=self.show_Roots,
+                        offvalue=False,
+                        command=lambda:updateBases(2, self.show_Base_2.get())
+                        ).grid(column=2,
+                               row=2,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="3",
+                        variable=self.show_Base_3,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=1, row=4, sticky="W")
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show the number in binary",
-                        variable=self.show_Binary,
+                        offvalue=False,
+                        command=lambda:updateBases(3, self.show_Base_3.get())
+                        ).grid(column=3,
+                               row=2,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="4",
+                        variable=self.show_Base_4,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=1, row=5, sticky="W")
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show the number in hexadecimal",
-                        variable=self.show_Hexadecimal,
+                        offvalue=False,
+                        command=lambda:updateBases(4, self.show_Base_4.get())
+                        ).grid(column=4,
+                               row=2,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="5",
+                        variable=self.show_Base_5,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=1, row=6, sticky="W")
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show the number's factors",
-                        variable=self.show_Factors,
+                        offvalue=False,
+                        command=lambda:updateBases(5, self.show_Base_5.get())
+                        ).grid(column=5,
+                               row=2,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="6",
+                        variable=self.show_Base_6,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=2, row=3, sticky="W")
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show if the number is palindromic",
-                        variable=self.show_Palindromic,
+                        offvalue=False,
+                        command=lambda:updateBases(6, self.show_Base_6.get())
+                        ).grid(column=6,
+                               row=2,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="7",
+                        variable=self.show_Base_7,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=2, row=4, sticky="W")
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show the number in the Fibonacci sequence",
-                        variable=self.show_Fibonacci,
+                        offvalue=False,
+                        command=lambda:updateBases(7, self.show_Base_7.get())
+                        ).grid(column=1,
+                               row=3,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="8",
+                        variable=self.show_Base_8,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=2, row=5, sticky="W")
-        ttk.Checkbutton(self.inspection_Settings_Frame,
-                        text="Show the factorial of the number",
-                        variable=self.show_Factorial,
+                        offvalue=False,
+                        command=lambda:updateBases(8, self.show_Base_8.get())
+                        ).grid(column=2,
+                               row=3,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="9",
+                        variable=self.show_Base_9,
                         onvalue=True,
-                        offvalue=False
-                        ).grid(column=2, row=6, sticky="W")
+                        offvalue=False,
+                        command=lambda:updateBases(9, self.show_Base_9.get())
+                        ).grid(column=3,
+                               row=3,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="10",
+                        variable=self.show_Base_10,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(10, self.show_Base_10.get())
+                        ).grid(column=4,
+                               row=3,
+                               sticky=W)
+
+        ttk.Checkbutton(self.base_Settings_Frame, text="11",
+                        variable=self.show_Base_11,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(11, self.show_Base_11.get())
+                        ).grid(column=5,
+                               row=3,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="12",
+                        variable=self.show_Base_12,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(12, self.show_Base_12.get())
+                        ).grid(column=6,
+                               row=3,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="13",
+                        variable=self.show_Base_13,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(13, self.show_Base_13.get())
+                        ).grid(column=1,
+                               row=4,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="14",
+                        variable=self.show_Base_14,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(14, self.show_Base_14.get())
+                        ).grid(column=2,
+                               row=4,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="15",
+                        variable=self.show_Base_15,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(15, self.show_Base_15.get())
+                        ).grid(column=3,
+                               row=4,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="16",
+                        variable=self.show_Base_16,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(16, self.show_Base_16.get())
+                        ).grid(column=4,
+                               row=4,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="17",
+                        variable=self.show_Base_17,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(17, self.show_Base_17.get())
+                        ).grid(column=5,
+                               row=4,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="18",
+                        variable=self.show_Base_18,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(18, self.show_Base_18.get())
+                        ).grid(column=6,
+                               row=4,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="19",
+                        variable=self.show_Base_19,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(19, self.show_Base_19.get())
+                        ).grid(column=1,
+                               row=5,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="20",
+                        variable=self.show_Base_20,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(20, self.show_Base_20.get())
+                        ).grid(column=2,
+                               row=5,
+                               sticky=W)
+
+        ttk.Checkbutton(self.base_Settings_Frame, text="21",
+                        variable=self.show_Base_21,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(21, self.show_Base_21.get())
+                        ).grid(column=3,
+                               row=5,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="22",
+                        variable=self.show_Base_22,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(22, self.show_Base_22.get())
+                        ).grid(column=4,
+                               row=5,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="23",
+                        variable=self.show_Base_23,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(23, self.show_Base_23.get())
+                        ).grid(column=5,
+                               row=5,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="24",
+                        variable=self.show_Base_24,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(24, self.show_Base_24.get())
+                        ).grid(column=6,
+                               row=5,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="25",
+                        variable=self.show_Base_25,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(25, self.show_Base_25.get())
+                        ).grid(column=1,
+                               row=6,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="26",
+                        variable=self.show_Base_26,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(26, self.show_Base_26.get())
+                        ).grid(column=2,
+                               row=6,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="27",
+                        variable=self.show_Base_27,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(27, self.show_Base_27.get())
+                        ).grid(column=3,
+                               row=6,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="28",
+                        variable=self.show_Base_28,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(28, self.show_Base_28.get())
+                        ).grid(column=4,
+                               row=6,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="29",
+                        variable=self.show_Base_29,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(29, self.show_Base_29.get())
+                        ).grid(column=5,
+                               row=6,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="30",
+                        variable=self.show_Base_30,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(30, self.show_Base_30.get())
+                        ).grid(column=6,
+                               row=6,
+                               sticky=W)
+
+        ttk.Checkbutton(self.base_Settings_Frame, text="31",
+                        variable=self.show_Base_31,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(31, self.show_Base_31.get())
+                        ).grid(column=1,
+                               row=7,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="32",
+                        variable=self.show_Base_32,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(32, self.show_Base_32.get())
+                        ).grid(column=2,
+                               row=7,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="33",
+                        variable=self.show_Base_33,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(33, self.show_Base_33.get())
+                        ).grid(column=3,
+                               row=7,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="34",
+                        variable=self.show_Base_34,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(34, self.show_Base_34.get())
+                        ).grid(column=4,
+                               row=7,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="35",
+                        variable=self.show_Base_35,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(35, self.show_Base_35.get())
+                        ).grid(column=5,
+                               row=7,
+                               sticky=W)
+        ttk.Checkbutton(self.base_Settings_Frame, text="36",
+                        variable=self.show_Base_36,
+                        onvalue=True,
+                        offvalue=False,
+                        command=lambda:updateBases(36, self.show_Base_36.get())
+                        ).grid(column=6,
+                               row=7,
+                               sticky=W)
 
     def isItPrime(self, input):
         for num in range(2, input): # Tries every number
@@ -742,6 +1191,67 @@ class Application(Tk):
             return product
         else:
             return "number too big"
+
+    def convertToBaseX(self, base): # Max base = 36
+        conversionTable = {0: "0",
+                           1: "1",
+                           2: "2",
+                           3: "3",
+                           4: "4",
+                           5: "5",
+                           6: "6",
+                           7: "7",
+                           8: "8",
+                           9: "9",
+                           10: "A",
+                           11: "B",
+                           12: "C",
+                           13: "D",
+                           14: "E",
+                           15: "F",
+                           16: "G",
+                           17: "H",
+                           18: "I",
+                           19: "J",
+                           20: "K",
+                           21: "L",
+                           22: "M",
+                           23: "N",
+                           24: "O",
+                           25: "P",
+                           26: "Q",
+                           27: "R",
+                           28: "S",
+                           29: "T",
+                           30: "U",
+                           31: "V",
+                           32: "W",
+                           33: "X",
+                           34: "Y",
+                           35: "Z"
+                           }
+        input_Number = str(self.selected_Number)[:]
+        input_Number = int(input_Number)
+        result = []
+
+        while True:
+            if input_Number in [-1, 0, 1]:
+                result.append(int(input_Number % base))
+                break
+            result.append(int(input_Number % base))
+            input_Number = int(input_Number / base)
+        x = 0
+        final_Result = result[:]
+        for digit in result:
+            final_Result[(len(result) - 1) - x] = str(digit)
+            x += 1
+        final_Result = "".join(final_Result)
+        while True:
+            if final_Result[0] == "0":
+                final_Result = final_Result[1:]
+            else:
+                break
+        return final_Result
 
 root = Application()
 root.mainloop()
