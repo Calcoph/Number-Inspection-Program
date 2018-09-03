@@ -4,9 +4,7 @@ Prime check [True]
 Square(or cube or whatever) root check [True]
 Binary [True]
 Hexadecimal [True]
-
-The number in all bases(up to 36) [False]
-
+The number in all bases(up to 36) [True]
 If it's not prime, check it's factors [True]
 Palindromic check [True]
 
@@ -22,13 +20,16 @@ Support for the number 0 and negative numbers [True]
 
 Hyperlink to a page in wikipedia explaining the property [False]
 Save favorite numbers with the option of a note to explain why [False]
-Support for numbers in any base [False]
-9/15.5
-Variable maximum number [False]
+Support for input numbers in any base [False]
+10/15.5
+Variable maximum number so the max time of a function is one second [False]
 Roman number [False]
 Spanish support [False]
 
 Settings File [True]
+Divide the "BASES" view in 3 pages of 12 bases each [True]
+Set the names of the bases correctly (1st, 2nd, 3rd, 4th
+                                      instead of 1th, 2th, 3th, 4th) [True]
 """
 
 
@@ -44,12 +45,19 @@ class Application(Tk):
         Tk.__init__(self)
         self.createInitialWidgets()
         self.createMenu()
+
     def createInitialWidgets(self):
         def inspect(event=None):
             try:
-                slaves = self.inspection_Frame.destroy()
-                for slave in slaves:
-                    slave.grid_forget()
+                #slaves = self.inspection_Frame.destroy()
+                self.inspection_Frame.destroy()
+                """try:
+                    self.page_Frame.destroy()
+                except:
+                    pass"""
+                """for slave in slaves:
+                    print(type(slave))
+                    slave.grid_forget()"""
             except:
                 pass
             self.createInspectionFrame()
@@ -254,12 +262,81 @@ class Application(Tk):
                     ).grid(column=4, row=7)
 
     def createInspectionFrame(self):
+        settings_Tab = SettingsTab(self, display_Window=False)
+        settings = settings_Tab.getSettings()
+        self.decimal_Mark = settings[0]
+        self.thousand_Mark = settings[1]
+        self.uppercase_hexadecimal = settings[2]
+        self.show_Relevant = settings[3]
+        self.show_Prime = settings[4]
+        self.show_Roots = settings[5]
+        self.show_Factors = settings[6]
+        self.show_Palindromic = settings[7]
+        self.show_Fibonacci = settings[8]
+        self.show_Factorial = settings[9]
+        self.selected_Bases = settings[10]
+
+        def display_Bases():
+            try:
+                self.prime_Label.grid_forget()
+            except:
+                pass
+            try:
+                self.root_Label.grid_forget()
+            except:
+                pass
+            try:
+                self.factor_Label.grid_forget()
+            except:
+                pass
+            try:
+                self.palindromic_Label.grid_forget()
+            except:
+                pass
+            try:
+                self.fibonacci_Label.grid_forget()
+            except:
+                pass
+            try:
+                self.factorial_Label.grid_forget()
+            except:
+                pass
+            try:
+                self.bases_Button.grid_forget()
+            except:
+                pass
+
+            self.page_Frame.grid(column=1, row=3)
+            self.return_Button.grid(column=1, row=1)
+            self.bases_Label.grid(column=1, row=2)
+        def display_Normal():
+            self.bases_Label.grid_forget()
+            self.return_Button.grid_forget()
+            try:
+                self.page_Frame.grid_forget()
+            except:
+                pass
+            if self.show_Prime:
+                self.prime_Label.grid(column=1, row=2)
+            if self.show_Roots:
+                self.root_Label.grid(column=1, row=3)
+            if self.show_Factors:
+                self.factor_Label.grid(column=1, row=4)
+            if self.show_Palindromic:
+                self.palindromic_Label.grid(column=1, row=5)
+            if self.show_Fibonacci:
+                self.fibonacci_Label.grid(column=1, row=6)
+            if self.show_Factorial:
+                self.factorial_Label.grid(column=1, row=7)
+            self.bases_Button.grid(column=1, row=1)
+
         self.selected_Number = int(self.input_Number.get())
         self.inspection_Frame = ttk.Frame(self.main_Frame)
-        self.inspection_Frame.grid(column=3, row=1, rowspan=3)
+        self.inspection_Frame.grid(column=3, row=1, rowspan=10)
+
 
         #current_Time = time.time()
-        if self.show_Prime.get():
+        if self.show_Prime:
             if self.selected_Number <= 0:
                 is_Prime = False
                 prime_Text = "{0} is not a prime number".format(self.selected_Number)
@@ -271,16 +348,17 @@ class Application(Tk):
                     if self.show_Relevant:
                         prime_Text =""
                     else:
+                        self.show_Prime = False
                         prime_Text = "{0} is not a prime number"\
                                     .format(self.selected_Number)
             self.prime_Label = ttk.Label(self.inspection_Frame, text=prime_Text)
-            self.prime_Label.grid(column=1, row=1)
+            self.prime_Label.grid(column=1, row=2)
             if self.show_Relevant and not is_Prime:
                 self.prime_Label.grid_forget()
             #prime_Time = time.time() - current_Time
             #print("prime time: {0}".format(prime_Time))
 
-        if self.show_Roots.get():
+        if self.show_Roots:
             #current_Time = time.time()
             has_Roots = True
             if self.selected_Number == 1:
@@ -306,57 +384,19 @@ class Application(Tk):
                         root_Text = "{0} has no perfect roots"\
                                     .format(self.selected_Number)
             self.root_Label = ttk.Label(self.inspection_Frame, text=root_Text)
-            self.root_Label.grid(column=1, row=2)
+            self.root_Label.grid(column=1, row=3)
             if self.show_Relevant and not has_Roots:
+                self.show_Roots = False
                 self.root_Label.grid_forget()
             #root_Time = time.time() - current_Time
             #print("root time: {0}".format(root_Time))
 
-        if self.show_Binary.get():
-            #current_Time = time.time()
-            if self.selected_Number == 0:
-                binary_Text = "0 in binary: 0"
-            else:
-                number_In_Binary = self.convertToBinary()
-                if self.selected_Number < 0:
-                    binary_Text = "{0} in binary: -{1}".format(self.selected_Number,
-                                                                number_In_Binary)
-                elif self.selected_Number == 0:
-                    binary_Text = "0 in binary: 0"
-                else:
-                    binary_Text = "{0} in binary: {1}".format(self.selected_Number,
-                                                                number_In_Binary)
-            self.binary_Label = ttk.Label(self.inspection_Frame, text=binary_Text)
-            self.binary_Label.grid(column=1, row=3)
-            #binary_Time = time.time() - current_Time
-            #print("binary time: {0}".format(binary_Time))
-
-        if self.show_Hexadecimal.get():
-            #current_Time = time.time()
-            if self.selected_Number == 0:
-                hexadecimal_Text = "0 in hexadecimal: 0"
-            else:
-                number_In_Hexadecimal = self.convertToHexadecimal()
-                if self.selected_Number < 0:
-                    hexadecimal_Text = "{0} in hexadecimal: -{1}"\
-                                        .format(self.selected_Number,
-                                                number_In_Hexadecimal)
-                else:
-                    hexadecimal_Text = "{0} in hexadecimal: {1}"\
-                                        .format(self.selected_Number,
-                                                number_In_Hexadecimal)
-            self.hexadecimal_Label = ttk.Label(self.inspection_Frame,
-                                                text=hexadecimal_Text)
-            self.hexadecimal_Label.grid(column=1, row=4)
-            #hexadecimal_Time = time.time() - current_Time
-            #print("hexadecimal time: {0}".format(hexadecimal_Time))
-
-        if self.show_Factors.get():
+        if self.show_Factors:
             #current_Time = time.time()
             if self.selected_Number == 0:
                 factors_Text = "{0} = 1*{0}".format(self.selected_Number)
             else:
-                factors = self.checkFactors()
+                factors = self.checkFactors(self.selected_Number)
                 if is_Prime:
                     factors_Text = "{0} = 1*{0}".format(self.selected_Number)
                 else:
@@ -368,11 +408,11 @@ class Application(Tk):
                         factors_Text = "{0} = {1}".format(self.selected_Number,
                                                             factors)
             self.factor_Label = ttk.Label(self.inspection_Frame, text=factors_Text)
-            self.factor_Label.grid(column=1, row=5)
+            self.factor_Label.grid(column=1, row=4)
             #factor_Time = time.time() - current_Time
             #print("factor time: {0}".format(factor_Time))
 
-        if self.show_Palindromic.get():
+        if self.show_Palindromic:
             #current_Time = time.time()
             is_Palindromic = self.isItPalindromic()
             if is_Palindromic:
@@ -383,13 +423,14 @@ class Application(Tk):
                                     .format(self.selected_Number)
             self.palindromic_Label = ttk.Label(self.inspection_Frame,
                                                 text=palindromic_Text)
-            self.palindromic_Label.grid(column=1, row=6)
+            self.palindromic_Label.grid(column=1, row=5)
             if self.show_Relevant and not is_Palindromic:
+                self.show_Palindromic = False
                 self.palindromic_Label.grid_forget()
             #palindromic_Time = time.time() - current_Time
             #print("palindromic time: {0}".format(palindromic_Time))
 
-        if self.show_Fibonacci.get():
+        if self.show_Fibonacci:
             #current_Time = time.time()
             in_Fibonacci = True
             if self.selected_Number <= 0:
@@ -423,13 +464,14 @@ class Application(Tk):
                     in_Fibonacci = False
             self.fibonacci_Label = ttk.Label(self.inspection_Frame,
                                             text=fibonacci_Text)
-            self.fibonacci_Label.grid(column=1, row=7)
+            self.fibonacci_Label.grid(column=1, row=6)
             if self.show_Relevant and not in_Fibonacci:
+                self.show_Fibonacci = False
                 self.fibonacci_Label.grid_forget()
             #fibonacci_Time = time.time() - current_Time
             #print("fibonacci time: {0}".format(fibonacci_Time))
 
-        if self.show_Factorial.get():
+        if self.show_Factorial:
             #current_Time = time.time()
             has_Factorial = True
             if self.selected_Number >= 0:
@@ -452,15 +494,115 @@ class Application(Tk):
                 has_Factorial = False
                 factorial_Text = "{0} has no factorial".format(self.selected_Number)
             self.factorial_Label = ttk.Label(self.inspection_Frame,
-                                                text=factorial_Text)
-            self.factorial_Label.grid(column=1, row=8)
+                                             text=factorial_Text)
+            self.factorial_Label.grid(column=1, row=7)
             if self.show_Relevant and not has_Factorial:
+                self.show_Factorial = False
                 self.factorial_Label.grid_forget()
             #factorial_Time = time.time() - current_Time
             #print("factorial time: {0}".format(factorial_Time))
             #print()
             #print()
             #print()
+
+        self.show_Bases = self.selected_Bases != set({})
+        if self.show_Bases:
+            bases_Text = StringVar()
+            bases_Text1 = ""
+            bases_Text2 = ""
+            bases_Text3 = ""
+            iteration_Count = 0
+            for base in self.selected_Bases:
+                listed_Base = list(str(base))
+                if listed_Base[len(listed_Base) - 1] == "1":
+                    sufix = "st"
+                elif listed_Base[len(listed_Base) - 1] == "2":
+                    sufix = "nd"
+                elif listed_Base[len(listed_Base) - 1] == "3":
+                    sufix = "rd"
+                else:
+                    sufix = "th"
+                if iteration_Count < 12:
+                    bases_Text1 = bases_Text1\
+                                 + "{0} in {1}{2} base: ".format(self.selected_Number,
+                                                                base, sufix)\
+                                 + self.convertToBaseX(base)\
+                                 + "\n"
+                elif iteration_Count < 24:
+                    bases_Text2 = bases_Text2\
+                                 + "{0} in {1}{2} base: ".format(self.selected_Number,
+                                                                base, sufix)\
+                                 + self.convertToBaseX(base)\
+                                 + "\n"
+                else:
+                    bases_Text3 = bases_Text3\
+                                 + "{0} in {1}{2} base: ".format(self.selected_Number,
+                                                                base, sufix)\
+                                 + self.convertToBaseX(base)\
+                                 + "\n"
+                iteration_Count += 1
+            bases_Text.set(bases_Text1)
+            self.bases_Label = ttk.Label(self.inspection_Frame,
+                                         textvariable=bases_Text)
+            def changetoPage1():
+                bases_Text.set(bases_Text1)
+                self.page1_Button.state(["disabled"])
+                self.page2_Button.state(["!disabled"])
+                self.page3_Button.state(["!disabled"])
+            def changeToPage2():
+                self.page1_Button.state(["!disabled"])
+                self.page2_Button.state(["disabled"])
+                self.page3_Button.state(["!disabled"])
+                bases_Text.set(bases_Text2)
+            def changeToPage3():
+                self.page1_Button.state(["!disabled"])
+                self.page2_Button.state(["!disabled"])
+                self.page3_Button.state(["disabled"])
+                bases_Text.set(bases_Text3)
+            self.page_Frame = ttk.Frame(self.inspection_Frame)
+            self.page_Frame.grid(column=1, row=3)
+            self.page1_Button = ttk.Button(self.page_Frame,
+                                      text="1",
+                                      command=changetoPage1,
+                                      state="disabled",
+                                      width=2)
+            self.page2_Button = ttk.Button(self.page_Frame,
+                                      text="2",
+                                      command=changeToPage2,
+                                      width=2)
+            self.page3_Button = ttk.Button(self.page_Frame,
+                                      text="3",
+                                      command=changeToPage3,
+                                      width=2)
+            if bases_Text2:
+                self.page1_Button.grid(column=1, row=1)
+                self.page2_Button.grid(column=2, row=1)
+            if bases_Text3:
+                self.page3_Button.grid(column=3, row=1)
+
+            self.bases_Button = ttk.Button(self.inspection_Frame,
+                                      text="BASES",
+                                      command=display_Bases)
+            if (self.show_Prime
+                   or self.show_Roots
+                   or self.show_Factors
+                   or self.show_Palindromic
+                   or self.show_Fibonacci
+                   or self.show_Factorial):
+                self.page_Frame.grid_forget()
+                self.bases_Button.grid(column=1, row=1)
+            else:
+                self.bases_Label.grid(column=1, row=2)
+
+        if (self.show_Prime
+               or self.show_Roots
+               or self.show_Factors
+               or self.show_Palindromic
+               or self.show_Fibonacci
+               or self.show_Factorial):
+            self.return_Button = ttk.Button(self.inspection_Frame,
+                                       text="<---",
+                                       command=display_Normal)
 
     def createMenu(self):
         def settingsTab():
@@ -528,85 +670,21 @@ class Application(Tk):
                 degree += 1
         return all_Roots
 
-    def convertToBinary(self):
-        input_Number = str(self.selected_Number)[:]
-        input_Number = int(input_Number)
-        result = []
-
-        while True:
-            if input_Number == 1 or input_Number == -1:
-                result.append(int(input_Number % 2))
-                break
-            result.append(int(input_Number % 2))
-            input_Number = int(input_Number / 2)
-
-        x = 0
-        final_Result = result[:]
-        for digit in result:
-            final_Result[(len(result) - 1) - x] = str(digit)
-            x += 1
-        final_Result = "".join(final_Result)
-        final_Result = int(final_Result)
-        return final_Result
-
-    def convertToHexadecimal(self):
-        def invert(list):
-            x = 1
-            result = list[:]
-            for item in list:
-                result[len(list) - x] = item
-                x +=1
-            return result
-        hextable = {0: "0",
-            1: "1",
-            10: "2",
-            11: "3",
-            100: "4",
-            101: "5",
-            110: "6",
-            111: "7",
-            1000: "8",
-            1001: "9",
-            1010: "a",
-            1011: "b",
-            1100: "c",
-            1101: "d",
-            1110: "e",
-            1111: "f"
-            }
-        number_In_Binary = list(str(self.convertToBinary()))
-        x = 1
-        result = []
-        final_Result = []
-        for digit in number_In_Binary:
-            hexdigit = number_In_Binary[(len(number_In_Binary) - x)]
-            result.append(str(hexdigit))
-            if x % 4 == 0:
-                result = invert(result)
-                result = "".join(result)
-                if self.uppercase_hexadecimal.get():
-                    final_Result.append(hextable[int(result)].upper())
-                else:
-                    final_Result.append(hextable[int(result)])
-                result = []
-            elif x == len(number_In_Binary):
-                result = invert(result)
-                result = "".join(result)
-                final_Result.append(hextable[int(result)])
-            x +=1
-        final_Result = invert(final_Result)
-        final_Result = "".join(final_Result)
-        return final_Result
-
-    def checkFactors(self):
-        absolute_Number = abs(self.selected_Number)
-        if absolute_Number == 1:
-            factors = ["1"]
-            return factors
+    def checkFactors(self, selected_Number):# WIP WIP WIP WIP it is technically correct but not ideal
+        absolute_Number = abs(selected_Number)
         factors = []
-        for num in range(1, int(self.selected_Number / 2)):
-            if self.selected_Number % num == 0 and self.isItPrime(num):
+        if absolute_Number == 1 or absolute_Number == 0:
+            factors.append("1")
+            return factors
+        for num in range(1, int(selected_Number) + 1):
+            if selected_Number % num == 0 and self.isItPrime(num):
                 factors.append(str(num))
+        for num in factors:
+            num = int(num)
+            selected_Number = int(selected_Number / num)
+        new_Factors = self.checkFactors(selected_Number)
+        for factor in new_Factors:
+            factors.append(factor)
         return factors
 
     def isItPalindromic(self):
@@ -686,9 +764,9 @@ class Application(Tk):
 
         while True:
             if input_Number in [-1, 0, 1]:
-                result.append(int(input_Number % base))
+                result.append(conversionTable[int(input_Number % base)])
                 break
-            result.append(int(input_Number % base))
+            result.append(conversionTable[int(input_Number % base)])
             input_Number = int(input_Number / base)
         x = 0
         final_Result = result[:]

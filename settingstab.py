@@ -1,11 +1,20 @@
+"""TODO:
+Completely clean show_Binary and show_Hexadecimal
+"""
+
+
 from tkinter import *
 from tkinter import ttk
 import repairsettings
 
 class SettingsTab:
-    def __init__(self, parent):
+
+    def __init__(self, parent, display_Window=True):
         self.createSettingsVariables()
-        self.settingsWindow(parent)
+        if display_Window:
+            self.settingsWindow(parent)
+
+
     def setSettingsValues(self, variable_Name, value_Type):
         with open("settings.txt") as settings:
             for line in settings:
@@ -23,7 +32,7 @@ class SettingsTab:
                 value = False
         elif value_Type == "int":
             value = int(value)
-        elif value_Type == "set":# WIP WIP WIP WIP WIP WIP WIP WIP WIP WIP WIP WIP
+        elif value_Type == "set":
             new_Set = set({})
             listed_Value = list(value)
             digit_Storage = ""
@@ -35,6 +44,7 @@ class SettingsTab:
                     digit_Storage = ""
             value = new_Set
         return value
+
     def createSettingsVariables(self):
         repairsettings.repairSettings()
         self.decimal_Mark = self.setSettingsValues("decimal_Mark", "string")
@@ -49,18 +59,15 @@ class SettingsTab:
         self.show_Relevant = BooleanVar()
         self.show_Relevant.set(self.setSettingsValues("show_Relevant",
                                                       "boolean"))
+
         self.show_Prime = BooleanVar()
         self.show_Prime.set(self.setSettingsValues("show_Prime",
                                                    "boolean"))
+
         self.show_Roots = BooleanVar()
         self.show_Roots.set(self.setSettingsValues("show_Roots",
                                                    "boolean"))
-        self.show_Binary = BooleanVar()
-        self.show_Binary.set(self.setSettingsValues("show_Binary",
-                                                    "boolean"))
-        self.show_Hexadecimal = BooleanVar()
-        self.show_Hexadecimal.set(self.setSettingsValues("show_Hexadecimal",
-                                                         "boolean"))
+
         self.show_Factors = BooleanVar()
         self.show_Factors.set(self.setSettingsValues("show_Factors",
                                                      "boolean"))
@@ -183,6 +190,7 @@ class SettingsTab:
         self.show_Base_36 = BooleanVar()
         self.show_Base_36.set(self.setSettingsValues("show_Base_36",
                                                     "boolean"))
+
     def updateSettings(self):
         with open("settings.txt", "w") as settings:
             settings.write("decimal_Mark = {0}\n".format("'" + self.decimal_Mark + "'"))
@@ -193,8 +201,6 @@ class SettingsTab:
             settings.write("show_Relevant = {0}\n".format(self.show_Relevant.get()))
             settings.write("show_Prime = {0}\n".format(self.show_Prime.get()))
             settings.write("show_Roots = {0}\n".format(self.show_Roots.get()))
-            settings.write("show_Binary = {0}\n".format(self.show_Binary.get()))
-            settings.write("show_Hexadecimal = {0}\n".format(self.show_Hexadecimal.get()))
             settings.write("show_Factors = {0}\n".format(self.show_Factors.get()))
             settings.write("show_Palindromic = {0}\n".format(self.show_Palindromic.get()))
             settings.write("show_Fibonacci = {0}\n".format(self.show_Fibonacci.get()))
@@ -237,6 +243,7 @@ class SettingsTab:
             settings.write("show_Base_34 = {0}\n".format(self.show_Base_34.get()))
             settings.write("show_Base_35 = {0}\n".format(self.show_Base_35.get()))
             settings.write("show_Base_36 = {0}\n".format(self.show_Base_36.get()))
+
     def settingsWindow(self, parent):
         def goBack():
             self.updateSettings()
@@ -257,7 +264,7 @@ class SettingsTab:
                         variable=self.show_Relevant,
                         onvalue=True,
                         offvalue=False
-                        ).grid(column=1, row=2, columnspan=2)
+                        ).grid(column=1, row=2, columnspan=2, pady=(10, 0))
         ttk.Checkbutton(self.settings_Window_Frame,
                         text="Show if the number is prime",
                         variable=self.show_Prime,
@@ -270,18 +277,6 @@ class SettingsTab:
                         onvalue=True,
                         offvalue=False
                         ).grid(column=1, row=4, sticky="W")
-        ttk.Checkbutton(self.settings_Window_Frame,
-                        text="Show the number in binary",
-                        variable=self.show_Binary,
-                        onvalue=True,
-                        offvalue=False
-                        ).grid(column=1, row=5, sticky="W")
-        ttk.Checkbutton(self.settings_Window_Frame,
-                        text="Show the number in hexadecimal",
-                        variable=self.show_Hexadecimal,
-                        onvalue=True,
-                        offvalue=False
-                        ).grid(column=1, row=6, sticky="W")
         ttk.Checkbutton(self.settings_Window_Frame,
                         text="Show the number's factors",
                         variable=self.show_Factors,
@@ -305,7 +300,7 @@ class SettingsTab:
                         variable=self.show_Factorial,
                         onvalue=True,
                         offvalue=False
-                        ).grid(column=2, row=6, sticky="W")
+                        ).grid(column=1, row=5, sticky="W")
 
         def updateDecimalSeparator():
             if self.decimal_Separator.get() == 1:
@@ -316,7 +311,7 @@ class SettingsTab:
                 self.thousand_Mark = ","
         self.cosmetic_Preferences_Frame = ttk.Frame(self.settings_Window_Frame,
                                                     padding="0 15 0 0")
-        self.cosmetic_Preferences_Frame.grid(column=1, row=7)
+        self.cosmetic_Preferences_Frame.grid(column=1, row=7, columnspan=2)
 
         ttk.Label(self.cosmetic_Preferences_Frame,
                   text="Show numbers the following way:").grid(column=1, row=7)
@@ -690,3 +685,18 @@ class SettingsTab:
                         ).grid(column=6,
                                row=7,
                                sticky=W)
+
+    def getSettings(self):
+        settings = [self.decimal_Mark,
+                    self.thousand_Mark,
+                    self.uppercase_hexadecimal.get(),
+                    self.show_Relevant.get(),
+                    self.show_Prime.get(),
+                    self.show_Roots.get(),
+                    self.show_Factors.get(),
+                    self.show_Palindromic.get(),
+                    self.show_Fibonacci.get(),
+                    self.show_Factorial.get(),
+                    self.selected_Bases
+                    ]
+        return settings
