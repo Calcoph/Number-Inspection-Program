@@ -1,7 +1,3 @@
-"""TODO:
-Completely clean show_Binary and show_Hexadecimal
-"""
-
 
 from tkinter import *
 from tkinter import ttk
@@ -13,7 +9,6 @@ class SettingsTab:
         self.createSettingsVariables()
         if display_Window:
             self.settingsWindow(parent)
-
 
     def setSettingsValues(self, variable_Name, value_Type):
         with open("settings.txt") as settings:
@@ -67,7 +62,6 @@ class SettingsTab:
         self.show_Roots = BooleanVar()
         self.show_Roots.set(self.setSettingsValues("show_Roots",
                                                    "boolean"))
-
         self.show_Factors = BooleanVar()
         self.show_Factors.set(self.setSettingsValues("show_Factors",
                                                      "boolean"))
@@ -80,6 +74,12 @@ class SettingsTab:
         self.show_Factorial = BooleanVar()
         self.show_Factorial.set(self.setSettingsValues("show_Factorial",
                                                        "boolean"))
+        self.show_Truncatables = BooleanVar()
+        self.show_Truncatables.set(self.setSettingsValues("show_Truncatables",
+                                                          "boolean"))
+        self.show_Perfects = BooleanVar()
+        self.show_Perfects.set(self.setSettingsValues("show_Perfects",
+                                                      "boolean"))
 
         self.selected_Bases = self.setSettingsValues("selected_Bases", "set")
         self.show_All_Bases = BooleanVar()
@@ -186,10 +186,10 @@ class SettingsTab:
                                                     "boolean"))
         self.show_Base_35 = BooleanVar()
         self.show_Base_35.set(self.setSettingsValues("show_Base_35",
-                                                    "boolean"))
+                                                     "boolean"))
         self.show_Base_36 = BooleanVar()
         self.show_Base_36.set(self.setSettingsValues("show_Base_36",
-                                                    "boolean"))
+                                                     "boolean"))
 
     def updateSettings(self):
         with open("settings.txt", "w") as settings:
@@ -205,6 +205,8 @@ class SettingsTab:
             settings.write("show_Palindromic = {0}\n".format(self.show_Palindromic.get()))
             settings.write("show_Fibonacci = {0}\n".format(self.show_Fibonacci.get()))
             settings.write("show_Factorial = {0}\n".format(self.show_Factorial.get()))
+            settings.write("show_Truncatables = {0}\n".format(self.show_Truncatables.get()))
+            settings.write("show_Perfects = {0}\n".format(self.show_Perfects.get()))
 
             settings.write("selected_Bases = {0}\n".format(self.selected_Bases))
             settings.write("show_All_Bases = {0}\n".format(self.show_All_Bases.get()))
@@ -301,6 +303,18 @@ class SettingsTab:
                         onvalue=True,
                         offvalue=False
                         ).grid(column=1, row=5, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show if the number is a left-truncatable prime",
+                        variable=self.show_Truncatables,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=1, row=6, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show if the number is a perfect prime number",
+                        variable=self.show_Perfects,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=2, row=6, sticky="W")
 
         def updateDecimalSeparator():
             if self.decimal_Separator.get() == 1:
@@ -697,6 +711,8 @@ class SettingsTab:
                     self.show_Palindromic.get(),
                     self.show_Fibonacci.get(),
                     self.show_Factorial.get(),
-                    self.selected_Bases
+                    self.selected_Bases,
+                    self.show_Truncatables.get(),
+                    self.show_Perfects.get()
                     ]
         return settings

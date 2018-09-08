@@ -5,12 +5,10 @@ Square(or cube or whatever) root check [True]
 Binary [True]
 Hexadecimal [True]
 The number in all bases(up to 36) [True]
-If it's not prime, check it's factors [True]
+If it's not prime, check it's factors [!False] doesn't work as intended
 Palindromic check [True]
-
-Truncatable prime [False]
-Perfect(or triperfect or whatever) number [False]
-
+Truncatable prime [True]
+Perfect(or triperfect or whatever) number [True]
 Factorial [True]
 
 Superpermutation [False] (i don't think i will do this but maybe)
@@ -21,7 +19,7 @@ Support for the number 0 and negative numbers [True]
 Hyperlink to a page in wikipedia explaining the property [False]
 Save favorite numbers with the option of a note to explain why [False]
 Support for input numbers in any base [False]
-10/15.5
+11/15.5
 Variable maximum number so the max time of a function is one second [False]
 Roman number [False]
 Spanish support [False]
@@ -275,6 +273,8 @@ class Application(Tk):
         self.show_Fibonacci = settings[8]
         self.show_Factorial = settings[9]
         self.selected_Bases = settings[10]
+        self.show_Perfects = settings[11]
+        self.show_Truncatables = settings[12]
 
         def display_Bases():
             try:
@@ -328,6 +328,10 @@ class Application(Tk):
                 self.fibonacci_Label.grid(column=1, row=6)
             if self.show_Factorial:
                 self.factorial_Label.grid(column=1, row=7)
+            if self.show_Truncatables:
+                self.Truncatables_Label.grid(column=1, row=8)
+            if self.show_Perfects:
+                self.Perfects_Label.grid(column=1, row=9)
             self.bases_Button.grid(column=1, row=1)
 
         self.selected_Number = int(self.input_Number.get())
@@ -343,7 +347,8 @@ class Application(Tk):
             else:
                 is_Prime = self.isItPrime(self.selected_Number)
                 if is_Prime:
-                    prime_Text = "{0} is a prime number".format(self.selected_Number)
+                    prime_Text = "{0} is a prime number"\
+                                 .format(self.selected_Number)
                 else:
                     if self.show_Relevant:
                         prime_Text =""
@@ -396,7 +401,7 @@ class Application(Tk):
             if self.selected_Number == 0:
                 factors_Text = "{0} = 1*{0}".format(self.selected_Number)
             else:
-                factors = self.checkFactors(self.selected_Number)
+                factors = self.checkPrimeFactors(self.selected_Number)
                 if is_Prime:
                     factors_Text = "{0} = 1*{0}".format(self.selected_Number)
                 else:
@@ -407,7 +412,8 @@ class Application(Tk):
                     else:
                         factors_Text = "{0} = {1}".format(self.selected_Number,
                                                             factors)
-            self.factor_Label = ttk.Label(self.inspection_Frame, text=factors_Text)
+            self.factor_Label = ttk.Label(self.inspection_Frame,
+                                          text=factors_Text)
             self.factor_Label.grid(column=1, row=4)
             #factor_Time = time.time() - current_Time
             #print("factor time: {0}".format(factor_Time))
@@ -489,14 +495,17 @@ class Application(Tk):
                     factorial_Text = "{0}! = {1}".format(self.selected_Number,
                                                             factorial_Result)
                 else:
-                    factorial_Text = "{0}! is too big".format(self.selected_Number)
+                    factorial_Text = "{0}! is too big"\
+                                     .format(self.selected_Number)
             else:
                 has_Factorial = False
-                factorial_Text = "{0} has no factorial".format(self.selected_Number)
+                factorial_Text = "{0} has no factorial"\
+                                 .format(self.selected_Number)
             self.factorial_Label = ttk.Label(self.inspection_Frame,
                                              text=factorial_Text)
             self.factorial_Label.grid(column=1, row=7)
-            if self.show_Relevant and not has_Factorial:
+            if (self.show_Relevant and factorial_Result == "number too big")\
+                or (self.show_Relevant and not has_Factorial):
                 self.show_Factorial = False
                 self.factorial_Label.grid_forget()
             #factorial_Time = time.time() - current_Time
@@ -588,18 +597,55 @@ class Application(Tk):
                    or self.show_Factors
                    or self.show_Palindromic
                    or self.show_Fibonacci
-                   or self.show_Factorial):
+                   or self.show_Factorial
+                   or self.show_Truncatables
+                   or self.show_Perfects):
                 self.page_Frame.grid_forget()
                 self.bases_Button.grid(column=1, row=1)
             else:
                 self.bases_Label.grid(column=1, row=2)
+
+        if self.show_Truncatables:
+            truncatables_Text = ""
+            is_Truncatable = self.truncatablePrime()
+            if is_Truncatable:
+                truncatables_Text = "{0} is a left-truncatable prime"\
+                                    .format(self.selected_Number)
+            else:
+                truncatables_Text = "{0} is not a left-truncatable prime"\
+                                    .format(self.selected_Number)
+            self.truncatables_Label = ttk.Label(self.inspection_Frame,
+                                                text=truncatables_Text)
+            self.truncatables_Label.grid(column=1, row=8)
+            if not is_Truncatable and self.show_Relevant:
+                self.show_Truncatables = False
+                self.truncatables_Label.grid_forget()
+
+        if self.show_Perfects:
+            perfects_Text = ""
+            is_Perfect = self.isItPerfect()
+            if is_Perfect:
+                perfects_Text = "{0} is a {1}-perfect number"\
+                                .format(self.selected_Number,
+                                        is_Perfect)
+            else:
+                perfects_Text = "{0} is not a perfect number"\
+                                .format(self.selected_Number)
+            self.perfects_Label = ttk.Label(self.inspection_Frame,
+                                            text=perfects_Text)
+            self.perfects_Label.grid(column=1, row=9)
+            if not is_Perfect and self.show_Relevant:
+                self.show_Perfects = False
+                self.perfects_Label.grid_forget()
 
         if (self.show_Prime
                or self.show_Roots
                or self.show_Factors
                or self.show_Palindromic
                or self.show_Fibonacci
-               or self.show_Factorial):
+               or self.show_Factorial
+               or self.show_Truncatables
+               or self.show_Perfects):
             self.return_Button = ttk.Button(self.inspection_Frame,
                                        text="<---",
                                        command=display_Normal)
@@ -670,7 +716,7 @@ class Application(Tk):
                 degree += 1
         return all_Roots
 
-    def checkFactors(self, selected_Number):# WIP WIP WIP WIP it is technically correct but not ideal
+    def checkPrimeFactors(self, selected_Number):# WIP WIP WIP WIP it is technically correct but not ideal
         absolute_Number = abs(selected_Number)
         factors = []
         if absolute_Number == 1 or absolute_Number == 0:
@@ -682,7 +728,7 @@ class Application(Tk):
         for num in factors:
             num = int(num)
             selected_Number = int(selected_Number / num)
-        new_Factors = self.checkFactors(selected_Number)
+        new_Factors = self.checkPrimeFactors(selected_Number)
         for factor in new_Factors:
             factors.append(factor)
         return factors
@@ -719,6 +765,42 @@ class Application(Tk):
             return product
         else:
             return "number too big"
+    # vvvv WIP WIP WIP it gives 11 as a valid left-truncatable
+    def truncatablePrime(self):# left-truncatable not right-truncatable
+        if self.selected_Number <= 1:
+            return False
+        listed_Number = list(str(self.selected_Number))
+        while True:
+            if len(listed_Number) != 1:
+                listed_Number = int("".join(listed_Number))
+                if self.isItPrime(listed_Number):
+                    listed_Number = list(str(listed_Number))
+                    listed_Number = listed_Number[1:]
+                else:
+                    return False
+            else:
+                listed_Number = int("".join(listed_Number))
+                if self.isItPrime(listed_Number):
+                    return True
+                else:
+                    return False
+
+    def isItPerfect(self):# function works but is not called yet
+        factors = []
+        for num in range(1, self.selected_Number + 1):
+            if self.selected_Number % num == 0:
+                factors.append(num)
+        sum = 0
+        for index in range(0, len(factors)):
+            sum += factors[index]
+        if sum == self.selected_Number * 2:
+            return "2"
+        elif sum == self.selected_Number * 3:
+            return "3"
+        elif sum == self.selected_Number * 4:
+            return "4"
+        else:
+            return False
 
     def convertToBaseX(self, base): # Max base = 36
         conversionTable = {0: "0",
