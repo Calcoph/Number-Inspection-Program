@@ -497,6 +497,15 @@ def diagnoseSettings(template, line_Count, listed_New_File):
                     listed_New_File.append(line)
                 else:
                     listed_New_File.append(template[line_Count - 1])
+            elif line_Count == 51:
+                expected_Variable_Name = "show_Roman"
+                possible_Values = ["True", "False"]
+                default_Value = "True"
+                if (expected_Variable_Name == variable_Name)\
+                    and (rest_Of_The_Line in possible_Values):
+                    listed_New_File.append(line)
+                else:
+                    listed_New_File.append(template[line_Count - 1])
             line_Count += 1
         return line_Count, listed_New_File
 def repairSettings():
@@ -549,9 +558,17 @@ def repairSettings():
         "show_Base_33 = False\n",
         "show_Base_34 = False\n",
         "show_Base_35 = False\n",
-        "show_Base_36 = False\n"]
+        "show_Base_36 = False\n",
+        "show_Roman = True\n"]
     is_Damaged = True
     is_Empty = False
+    try: #If the file doesn't exist, create it
+        file = open("settings.txt", "r")
+        file.close()
+    except IOError:
+        file = open("settings.txt", "w")
+        file.write("placeholder")
+        file.close()
     with open("settings.txt") as settings:
         string_Template = "".join(template)
         if settings.read() == string_Template:
@@ -569,7 +586,7 @@ def repairSettings():
         line_Count = 1
         listed_New_File = []
         while True:
-            if line_Count <= 50:
+            if line_Count <= 51:
                 line_Count, listed_New_File = diagnoseSettings(template,
                                                                line_Count,
                                                                listed_New_File)

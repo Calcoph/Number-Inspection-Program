@@ -80,6 +80,9 @@ class SettingsTab:
         self.show_Perfects = BooleanVar()
         self.show_Perfects.set(self.setSettingsValues("show_Perfects",
                                                       "boolean"))
+        self.show_Roman = BooleanVar()
+        self.show_Roman.set(self.setSettingsValues("show_Roman",
+                                                      "boolean"))
 
         self.selected_Bases = self.setSettingsValues("selected_Bases", "set")
         self.show_All_Bases = BooleanVar()
@@ -245,6 +248,7 @@ class SettingsTab:
             settings.write("show_Base_34 = {0}\n".format(self.show_Base_34.get()))
             settings.write("show_Base_35 = {0}\n".format(self.show_Base_35.get()))
             settings.write("show_Base_36 = {0}\n".format(self.show_Base_36.get()))
+            settings.write("show_Roman = {0}\n".format(self.show_Roman.get()))
 
     def settingsWindow(self, parent):
         def goBack():
@@ -315,6 +319,12 @@ class SettingsTab:
                         onvalue=True,
                         offvalue=False
                         ).grid(column=2, row=6, sticky="W")
+        ttk.Checkbutton(self.settings_Window_Frame,
+                        text="Show the number in roman numerals",
+                        variable=self.show_Roman,
+                        onvalue=True,
+                        offvalue=False
+                        ).grid(column=1, row=7, sticky="W")
 
         def updateDecimalSeparator():
             if self.decimal_Separator.get() == 1:
@@ -325,30 +335,32 @@ class SettingsTab:
                 self.thousand_Mark = ","
         self.cosmetic_Preferences_Frame = ttk.Frame(self.settings_Window_Frame,
                                                     padding="0 15 0 0")
-        self.cosmetic_Preferences_Frame.grid(column=1, row=7, columnspan=2)
+        self.cosmetic_Preferences_Frame.grid(column=1, row=8, columnspan=2)
 
         ttk.Label(self.cosmetic_Preferences_Frame,
-                  text="Show numbers the following way:").grid(column=1, row=7)
-        ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="10000/3 = 3.333,33",
+                  text="Show numbers the following way:    ").grid(column=1, row=1)
+        ttk.Radiobutton(self.cosmetic_Preferences_Frame,
+                        text="10000/3 = 3.333,33    ",
                         variable=self.decimal_Separator,
                         value=1,
                         command=updateDecimalSeparator
-                        ).grid(column=1, row=8)
-        ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="10000/3 = 3,333.33",
+                        ).grid(column=1, row=2)
+        ttk.Radiobutton(self.cosmetic_Preferences_Frame,
+                        text="10000/3 = 3,333.33    ",
                         variable=self.decimal_Separator,
                         value=2,
                         command=updateDecimalSeparator
-                        ).grid(column=1, row=9)
+                        ).grid(column=1, row=3)
 
         ttk.Label(self.cosmetic_Preferences_Frame,
                   text="Show numbers in base 10+ the following way:"
-                  ).grid(column=2, row=7)
+                  ).grid(column=2, row=1)
         ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="A78FC0",
                         variable=self.uppercase_hexadecimal,
-                        value=True).grid(column=2, row=8)
+                        value=True).grid(column=2, row=2)
         ttk.Radiobutton(self.cosmetic_Preferences_Frame, text="a78fc0",
                         variable=self.uppercase_hexadecimal,
-                        value=False).grid(column=2, row=9)
+                        value=False).grid(column=2, row=3)
 
         self.base_Settings_Frame = ttk.Frame(parent, padding="15 0 0 0")
         self.base_Settings_Frame.grid(column=2, row=1)
@@ -713,6 +725,7 @@ class SettingsTab:
                     self.show_Factorial.get(),
                     self.selected_Bases,
                     self.show_Truncatables.get(),
-                    self.show_Perfects.get()
+                    self.show_Perfects.get(),
+                    self.show_Roman.get()
                     ]
         return settings
