@@ -21,7 +21,9 @@ Save favorite numbers with the option of a note to explain why [False]
 Support for input numbers in any base [False]
 13/15.5
 Variable maximum number so the max time of an inspection is one second [False]
+
 Roman number [True]
+
 Spanish support [False]
 
 Settings File [True]
@@ -63,7 +65,7 @@ class Application(Tk):
                 self.inspection_Frame.destroy()
             except:
                 pass
-            self.createInspectionFrame()
+            self.fillInspectionFrame()
         self.input_Number = StringVar()
         self.bind("<Return>", inspect)
         self.main_Frame = ttk.Frame(self)
@@ -267,7 +269,7 @@ class Application(Tk):
                         ).grid(column=4, row=7)
         calculator()
 
-    def createInspectionFrame(self):
+    def fillInspectionFrame(self):
         settings_Tab = SettingsTab(self, display_Window=False)
         settings = settings_Tab.getSettings()
         self.decimal_Mark = settings[0]
@@ -288,19 +290,19 @@ class Application(Tk):
         def display_Bases():
             try:
                 self.prime_Frame.grid_forget()
-            except:
+            except AttributeError:
                 pass
             try:
                 self.root_Frame.grid_forget()
-            except:
+            except AttributeError:
                 pass
             try:
                 self.factor_Frame.grid_forget()
-            except:
+            except AttributeError:
                 pass
             try:
                 self.palindromic_Frame.grid_forget()
-            except:
+            except AttributeError:
                 pass
             try:
                 self.fibonacci_Frame.grid_forget()
@@ -308,19 +310,23 @@ class Application(Tk):
                 pass
             try:
                 self.factorial_Frame.grid_forget()
-            except:
+            except AttributeError:
                 pass
             try:
                 self.bases_Button.grid_forget()
-            except:
+            except AttributeError:
                 pass
             try:
                 self.truncatables_Frame.grid_forget()
-            except:
+            except AttributeError:
                 pass
             try:
                 self.perfects_Frame.grid_forget()
-            except:
+            except AttributeError:
+                pass
+            try:
+                self.roman_Frame.grid_forget()
+            except AttributeError:
                 pass
 
             self.page_Frame.grid(column=1, row=3)
@@ -331,7 +337,7 @@ class Application(Tk):
             self.return_Button.grid_forget()
             try:
                 self.page_Frame.grid_forget()
-            except:
+            except AttributeError:
                 pass
             if self.show_Prime:
                 self.prime_Frame.grid(column=1, row=2)
@@ -349,6 +355,8 @@ class Application(Tk):
                 self.truncatables_Frame.grid(column=1, row=8)
             if self.show_Perfects:
                 self.perfects_Frame.grid(column=1, row=9)
+            if self.show_Roman:
+                self.roman_Frame.grid(column=1, row=10)
             self.bases_Button.grid(column=1, row=1)
 
         self.selected_Number = int(self.input_Number.get())
@@ -762,7 +770,8 @@ class Application(Tk):
                    or self.show_Fibonacci
                    or self.show_Factorial
                    or self.show_Truncatables
-                   or self.show_Perfects):
+                   or self.show_Perfects
+                   or self.show_Roman):
                 self.page_Frame.grid_forget()
                 self.bases_Button.grid(column=1, row=1)
             else:
@@ -775,7 +784,8 @@ class Application(Tk):
                or self.show_Fibonacci
                or self.show_Factorial
                or self.show_Truncatables
-               or self.show_Perfects):
+               or self.show_Perfects
+               or self.show_Roman):
             self.return_Button = ttk.Button(self.inspection_Frame,
                                        text="<---",
                                        command=display_Normal)
